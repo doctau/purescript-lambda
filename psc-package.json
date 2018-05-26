@@ -1,0 +1,11 @@
+{
+  "name": "purescript-lambda",
+  "set": "aws-lambda-express",
+  "source": "https://github.com/doctau/package-sets",
+  "depends": [
+    "console",
+    "aws-lambda-express",
+    "affjax",
+    "prelude"
+  ]
+}
