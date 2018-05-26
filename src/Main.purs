@@ -1,12 +1,17 @@
 module Main
   ( handler
+  , main
   ) where
 
-import Prelude (discard)
+import Prelude (discard, ($))
+import Control.Monad.Eff (Eff)
+import Control.Monad.Eff.Console (CONSOLE(), log)
 import Control.Monad.Eff.Exception (Error, message)
-import Node.Express.App (App, useOnError, use, get)
+import Node.Express.App (App, get, listenHttp, useOnError, use)
 import Node.Express.Handler (Handler)
 import Node.Express.Response (sendJson, setStatus)
+import Node.Express.Types (EXPRESS)
+import Node.HTTP (Server())
 import Network.AWS.Lambda.Express
 
 
@@ -37,3 +42,10 @@ app = do
 handler :: HttpHandler
 handler =
   makeHandler app
+
+-- allow this to be run normally, outside Lambda
+main :: forall e. Eff ( console :: CONSOLE
+                      , express :: EXPRESS
+                      | e) Server
+main = listenHttp app 8080 \_ ->
+  log $ "Listening on 8080 "
