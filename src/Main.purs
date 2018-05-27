@@ -7,6 +7,10 @@ import Prelude (discard, ($))
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE(), log)
 import Control.Monad.Eff.Exception (Error, message)
+import Data.Argonaut (class DecodeJson, class EncodeJson, decodeJson, encodeJson
+                     , fromString, toString)
+import Data.Argonaut.Core (stringify)
+import Data.Argonaut.Parser (jsonParser)
 import Node.Express.App (App, get, listenHttp, useOnError, use)
 import Node.Express.Handler (Handler)
 import Node.Express.Response (sendJson, setStatus)
@@ -31,10 +35,16 @@ indexHandler :: forall e. Handler e
 indexHandler = do
   sendJson { status: "ok" }
 
+postHandler :: forall e. Handler e
+postHandler = do
+  let req = decodeJson <$> jsonParser (s)
+  sendJson { status: "ok" }
+
 
 app :: forall e. App e
 app = do
   get "/" indexHandler
+  post "/" postHandler
   use notFoundHandler
   useOnError errorHandler
 

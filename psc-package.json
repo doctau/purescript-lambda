@@ -3,6 +3,7 @@
   "set": "aws-lambda-express",
   "source": "https://github.com/doctau/package-sets",
   "depends": [
+    "argonaut-codecs",
     "console",
     "aws-lambda-express",
     "affjax",
